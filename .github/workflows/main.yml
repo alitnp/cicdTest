@@ -1,5 +1,8 @@
 name: First Workflow
-on: [push, workflow_dispatch]
+on:
+ push:
+  branches:
+   - main
 jobs:
  do-some-test:
   runs-on: ubuntu-latest
@@ -18,7 +21,7 @@ jobs:
      run: echo "tests is running"
    - name: print to goodbye
      run: echo "Goodbye"
- deploy:
+ build:
   needs: [do-some-test]
   runs-on: ubuntu-latest
   steps:
@@ -34,5 +37,17 @@ jobs:
      run: npm ci
    - name: build project
      run: npm run build
+   - name: build end
+     run: echo "build success"
+ deploy:
+  needs: [build]
+  runs-on: ubuntu-latest
+  steps:
+   - name: print to hello
+     run: echo "Hello World!"
+   - name: get code
+     uses: actions/checkout@v3
    - name: deploy to server
-     run: echo "deploying"
+     run: echo "sending to server"
+   - name: deploy end
+     run: echo "deploy success"
