@@ -1,7 +1,7 @@
 name: First Workflow
 on: push
 jobs:
-  first-job:
+  do-some-test:
     runs-on: ubuntu-latest
     steps:
       - name: print to hello
@@ -14,8 +14,27 @@ jobs:
           node-version: 18
       - name: install dependencies
         run: npm ci
-      - name: run react
-        run: npm start
+      - name: run react tests
+        run: echo "tests is running"
       - name: print to goodbye
         run: echo "Goodbye"
-        
+  deploy:
+    needs: [do-some-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: print to hello
+        run: echo "Hello World!"
+      - name: get code
+        uses: actions/checkout@v3
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: install dependencies
+        run: npm ci
+      - name: build project
+        run: npm run build
+      - name: deploy to server
+        run: echo "deploying"
+
+      
